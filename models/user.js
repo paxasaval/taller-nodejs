@@ -15,6 +15,10 @@ let userschema = new Schema({
         type: String,
         required:[true,"El email es Requerido"]
     },
+    userName: {
+        type: String,
+        required: [true, "El nombre de usuario es requerido"]
+    },
     password: {
         type: String,
         required:[true,"El pasword es Requerido"]
@@ -32,5 +36,13 @@ let userschema = new Schema({
         default: true
     }
 });
+
+userschema.methods.toJSON = function() {
+    let user = this
+    let user_object = user.toObject()
+    delete user_object.password
+    return user_object
+}
+
 
 module.exports = mongoose.model('User', userschema);
