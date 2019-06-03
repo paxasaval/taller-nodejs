@@ -37,12 +37,7 @@ let userschema = new Schema({
     }
 });
 
-userschema.methods.toJSON = function() {
-    let user = this
-    let user_object = user.toObject()
-    delete user_object.password
-    return user_object
-}
+
 
 
 module.exports = mongoose.model('User', userschema);

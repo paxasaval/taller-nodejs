@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express();
 const User = require('../models/user');
-
+const bcrypt = require("bcrypt");
+const {verificar_token} = require('../middleware/auth')
 
 //GET
-app.get("/user", (req, res) => {
+app.get("/user", verificar_token,(req, res) => {
     User.find({
         state: true
     }).exec((err,userDB)=>{
@@ -22,7 +23,7 @@ app.get("/user", (req, res) => {
  });
 
 //POST
-app.post("/user", (req, res) => {
+app.post("/user",(req, res) => {
     let body = req.body;
 
     let usuario = new User({
@@ -30,7 +31,7 @@ app.post("/user", (req, res) => {
         lastName: body.lastName,
         email: body.email,
         userName: body.userName,
-        password: body.password,
+        password: bcrypt.hashSync(body.password,10),
         age: body.age,
         rol: body.rol,
     });
@@ -47,6 +48,7 @@ app.post("/user", (req, res) => {
                 ok: false,
                 userDB
             })
+
         }
         res.status(200).json({
             ok:true,
@@ -56,7 +58,7 @@ app.post("/user", (req, res) => {
 });
 
 //PUT
-app.put('/user/:id',(req,res)=>{
+app.put('/user/:id',verificar_token,(req,res)=>{
     let id = req.params.id
 
     let body = req.body;
@@ -95,7 +97,7 @@ app.put('/user/:id',(req,res)=>{
     })
 });
 //DELETE
-app.delete('/user/:id',(req, res)=>{
+app.delete('/user/:id',verificar_token,(req, res)=>{
     let id =req.params.id
     let userState = {
         state:false
@@ -124,4 +126,4 @@ app.delete('/user/:id',(req, res)=>{
 
     })
 })
-module.exports = app;
+module.exports = app

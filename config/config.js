@@ -12,9 +12,14 @@ if (process.env.NODE_ENV == 'dev') {
 } else {
     urlDB = process.env.MONGO_URI;
 }
+process.env.URLDB = urlDB;
 // 
 // PORT
 // 
 process.env.PORT = process.env.PORT || 3000;
 
-process.env.URLDB = urlDB;
+// SEED
+process.env.SEED = process.env.SEED || "seed=secreto";
+
+// CADUCIDAD
+process.env.CADUCIDAD = process.env.CADUCIDAD || '30d';
